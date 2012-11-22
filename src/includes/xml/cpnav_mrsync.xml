@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Menú for the MRSync extension 
+ *
+ * @package MRSync for vBulletin
+ * @author Jose Argudo Blanco
+ * @website www.consultorpc.com
+ * @email jose@consultorpc.com
+ * @version 1.0.0
+ * @date 26/08/11
+ * @copyright ConsultorPC
+ * @license Proprietary
+-->               
+<navgroups product="mrsync" master="true">    
+    <navgroup phrase="mrsync" hr="true" permissions="canadminsettings" displayorder="12">        
+        <navoption displayorder="10">
+            <phrase>sync_settings</phrase>
+            <link>mrsync_settings_admin.php?do=showSettings</link>
+        </navoption>    
+        <navoption displayorder="11">
+            <phrase>sync_users</phrase>
+            <link>mrsync_admin.php?do=showLogin</link>
+        </navoption>
+        <navoption displayorder="12">
+            <phrase>sync_launch</phrase>
+            <link>mrsync_launch_admin.php?do=showCampaigns</link>
+        </navoption>        
+    </navgroup>
+</navgroups>

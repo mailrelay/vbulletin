@@ -1,0 +1,135 @@
+----------------------------------------------
+---- Instalación de MRSync para vBulletin ----
+----------------------------------------------
+
+La instalación de MRSync para vBulletin es muy sencilla. Solo requiere de un par de pasos que se realizan muy rápidamente. Esto incluye subir algunos archivos por FTP, y ejecutar algunas configuraciones en el panel de administración.
+
+Tras su instalación dispondrá de nuevo menú en el panel izquierdo, que le permitirá sincronizar todos sus usuarios de vBulletin con su cuenta de Mailrelay. Ahorrándole el laborioso proceso de copiarlas manualmente, y organizarlas por grupos.
+
+Además la extensión le ofrece algunas ventajas adicionales, como sincronizar nuevos usuarios de forma automática o enviar todos los correos del foro utilizando la cuenta SMTP de Mailrelay.
+
+Comencemos con el proceso de instalación: 
+
+---------------------
+Primer paso requerido
+---------------------
+
+El primer paso para poder utilizar esta extensión es habilitar la clave de API en su cuenta de Mailrelay. Para ello debe acceder a su panel de Mailrelay. Una vez ahí acceda al menú 'Configuración', submenú 'Acceso a la API' y haga clic en el botón 'Generar nueva clave API'. No es necesario que anote esta clave, una vez generada, la extensión podrá acceder a ella utilizando su usuario y contraseña.
+
+-----------------------------------------
+Subir al servidor los archivos necesarios
+-----------------------------------------
+
+Para realizar este proceso puede contar con la ayuda de un programa FTP, como el gratuito Filezilla ( http://filezilla-project.org/download.php?type=client ). Necesitará también los datos de acceso FTP al hosting donde tiene instalado el software vBulletin, para ello solo debé contactar con su proveedor de hosting.
+
+Los ficheros que necesita subir son los siguientes ( a la izquierda vemos el fichero de origen, y a la derecha el destino en el servidor ):
+
+- admincp\mrsync_admin.php          ==> admincp\mrsync_admin.php
+- admincp\mrsync_settings_admin.php ==> admincp\mrsync_settings_admin.php
+- admincp\mrsync_launch_admin.php   ==> admincp\mrsync_launch_admin.php
+- includes\mrsync\                  ==> includes\mrsync\
+- includes\xml\                     ==> includes\xml\
+
+--------------------------------------------
+Instalación desde el panel de administración
+--------------------------------------------
+
+Una vez hemos subido los ficheros necesarios, queda realizar algunos pasos de configuración desde el panel de control:
+
+- Iremos al menú "Plugins Y Productos"
+- Sub-menú "Administrar Productos"
+- Luego haremos clic en el enlace "Agregar/Importar Producto" (Aparece en la parte inferior de la tabla)
+- Como ya hemos subido el fichero XML de la herramienta buscaremos la opción que indica "O importes el archivo XML desde tu servidor"
+- En la caja de formulario que aparece a la derecha insertaremos el siguiente texto "./includes/xml/product-mrsync.xml"
+- Si está actualizando desde una versión anterior marque la opción "Permitir Sobrescritura" a "Sí"
+- Por último haga clic en el botón "importar"
+
+Esto finaliza el proceso de instalación, ahora será necesario que configuremos la extensión.
+
+-------------------------------
+Configuración de la herramienta
+-------------------------------
+
+Una vez instalada la extensión dispondremos de una nueva opción de menú en el lateral izquierdo. Veremos que aparece bajo el nombre de MRSync. Podemos desplegar esta opción de menu como cualquier otro menú de vBulletin. Dentro veremos los siguientes submenús:
+
+- Configuración
+- Sincronizar usuarios
+- Lanzar boletín
+
+Seleccione la primera opción, "Configuración". Esto nos llevará a una pantalla donde deberemos rellenar los siguientes datos:
+
+- Host (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
+- Usuario (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
+- Password (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
+
+- Habilitar auto sincronización de usuarios nuevos => habilitando esta opción, cuando un usuario se registra en el foro, automáticamente se sincroniza con su cuenta Mailrelay.
+
+- Habilitar envio SMTP por Mailrelay => con esta opción habilitada todos los correos que se envien desde el foro, como cuando un nuevo usuario se registra, se envian utilizando la cuenta smtp de Mailrelay.
+
+Una vez rellenados estos campos, y guardados, si ha seleccionado la opción de auto sincronización de usuarios nuevos, aparecerá una nueva opción:
+
+- Selecciona grupos de destino en Mailrelay
+
+Esta opción muestra todos los grupos disponibles en su cuenta de Mailrelay. Seleccione los grupos que desee. Cuando un nuevo usuario se registra, y si la opción de sincronización automática está habilitada, el usuario se sincronizará en los grupos seleccionados.
+
+--------------------
+Sincronizar usuarios
+--------------------
+
+Una vez hayamos guardado esta configuración, podremos utilizar la extensión para sincronizar los usuarios de nuestro foro, con nuestra cuenta de Mailrelay. Para ello seleccionaremos la opción de menú "Sincronizar usuarios". Esto le mostrará una página con las siguientes opciones:
+
+- Host
+- Usuario
+- Password
+
+Estos campos habrán sido rellenados con la configuración previamente guardada, de forma que no será necesario que rellenemos nada. Haremos clic en el botón "Enviar", lo que nos llevará al segundo paso de la sincronización, donde deberemos indicar las siguientes opciones:
+
+- Selecciona los grupos de vBulletin para sincronizar. En esta opción seleccionaremos que grupos de usuarios queremos sincronizar (administradores, moderadores ...), podemos seleccionar todos los grupos que queramos, o la opción de todos.
+
+- En la siguiente opción podremos seleccionar otro tipo de grupos. Grupos sociales, igualmente podremos seleccionar los grupos deseados.
+
+- Por último deberemos seleccionar a que grupos de nuestra cuenta de Mailrelay se deben sincronizar estos usuarios.
+
+Seleccionando estas opciones, de la forma que deseemos, podemos tener un control total sobre la sincronización, y definir los grupos en Mailrelay que posteriormente utilizaremos en los envios de boletines.
+
+Haremos nuevamente clic en el botón "Enviar". 
+
+Veremos la siguiente pantalla, que simplemente nos muestra el proceso de sincronización. Muestra una barra de progreso, el número de usuarios sincronizados y el total.
+
+[ NOTA: Dependiendo del número de usuarios a sincronizar, el proceso puede tardar desde unos segundos a varios minutos. ]
+
+En el último paso del proceso, se mostrará un resumen con el número usuarios sincronizados.
+
+IMPORTANTE: tenga en cuenta que si un usuario ha seleccionado que no desea recibir correos del foro, en el momento de la sincronización será eliminado de su cuenta Mailrelay, NO del foro. Esto ayuda a que los usuarios que no desean recibir notificaciones del foro, tampoco reciban boletines que, seguramente, no desean.
+
+--------------
+Lanzar boletín
+--------------
+
+La tercera opción "Lanzar boletín" nos permite lanzar un boletín, previamente creado, al grupo que deseemos. Se trata simplemente de una comodidad que nos puede ahorrar algo de tiempo. 
+
+-------
+Plugins
+-------
+
+Adicionalmente la extensión cuenta con dos plugins, que realizan las siguientes opciones:
+
+- Sincronización de usuarios eliminados. Cuando se elimina un usuario desde el panel de administración, automáticamente se elimina de su cuenta de Mailrelay. De esta forma su cuenta de Mailrelay permanecerá siempre ordenada.
+
+- Sincronización de nuevos usuarios. Cuando se registra un nuevo usuario en el foro, automaticamente se sincroniza con su cuenta de Mailrelay. Esto le ayudará de forma que no será necesario realizar la sincronización por cada usuario que se registre.
+
+--------------
+Desinstalación
+--------------
+
+Desinstalar la extensión es igual de sencillo que su instalación. Solo debe ir al menú "Plugins y productos", opción "Administrar productos". En la línea donde puede ver la información de la extensión, encontrará también un menú desplegable, con la opción de "Desinstalar". Seleccionando esta opción, la extensión, así como sus tablas y plugins se desinstalarán. Es posible que los ficheros no se borren del FTP.
+
+---------------------------------------------
+Notas finales
+---------------------------------------------
+
+- Si los usuarios deshabilitan 'Recibir Correo del Equipo del Foro' del menú 'Usuario' -> 'Panel de control' -> 'Configuración general' -> 'Mensajería y notificaciones' -> 'Recibir correo del equipo del foro' no se sincronizarán. Si lo deshabilitan posteriormente a haber sido sincronizados serán borrados del Mailing Manager en la próxima sincronización.
+
+- Esta extensión ha sido probada en la versión vBulletin® Version 4.1.5 Patch Level 1 . 
+
+- Este software se proporciona "TAL CUAL" por los propietarios del copyright, y con ningun garantía expresa o implícita, incluyendo, pero no limitado a, las garantías de comercialización y aptitud para un proposito en particular. En ningún caso el propietario del copyright o los colaborados serán responsables por daños directos, indirectos, accidentales, especiales, ejemplares o derivados (incluyendo, sin limitaciones a la obtención de bienes o servicios, la pérdida de uso, de datos o de beneficios; o interrupción de negocio), de cualquier causa a partir del uso de este software, incluso si se ha advertido de la posibilidad de tales daños.

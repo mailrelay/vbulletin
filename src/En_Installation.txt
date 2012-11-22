@@ -1,0 +1,152 @@
+----------------------------------------------
+------ Installing MRSync for vBulletin -------
+----------------------------------------------
+
+The installation of the MRSync product for vBulletin is very simple. It only takes a few steps to do it. This includes uploading some files by FTP, and doing some configuration in the admin panel.
+
+After installing the extension a new menu will appear on the left panel, this menu will let you sync all your vBulletin users with your Mailrelay account. This will save you time when syncing and organizing your users in groups.
+
+The extension will also give you some aditional benefits, like automatically syncing new users or using your Mailrelay SMTP account for sending all your vBulletin emails.
+
+Let's start with the installation process:
+
+-------------------
+First required step
+-------------------
+
+The first step, in order for us to be able to use the extension, is to enable the API key of our Mailrelay account. For that we need to log in our Mailrelay account admin panel. Once we are there we will go to the "Settings" menu, then "API access". On that screen click on the "Generate new API key" button. It's not necessary for us to write down this key, once it's generated, the extension will be able to get it using your user and password data.
+
+----------------------------------------
+Upload the necessary files to the server
+----------------------------------------
+
+For uploading these files we can use an FTP software, like the free Filezilla ( http://filezilla-project.org/download.php?type=client ). We will also require the access data to our FTP account, usually your hosting provider, where you have installed your vBulletin software, will be able to provide you with this data.
+
+The files we need to upload are the following ( to the left you can see the source file, and to the right the destination file ):
+
+- admincp\mrsync_admin.php          ==> admincp\mrsync_admin.php
+- admincp\mrsync_settings_admin.php ==> admincp\mrsync_settings_admin.php
+- admincp\mrsync_launch_admin.php   ==> admincp\mrsync_launch_admin.php
+- includes\mrsync\                  ==> includes\mrsync\
+- includes\xml\                     ==> includes\xml\
+
+---------------------------------------
+Installation from vBulletin admin panel
+---------------------------------------
+
+Once we have uploaded all the required files, we need to do some configs from the admin panel:
+
+- We will go to the "Plugins & products" menu
+- Then to the "Manage Products" option
+- Once in the manage products screen we will click on the "Add/Import Product" link, which appears at the bottom
+- As we have already uploaded the XML file of the extension, we will search for the "OR import the XML file from your server" option
+- In the field to the right we will put the following "./includes/xml/product-mrsync.xml"
+- If you are updating from a previous version check the option "Allow Overwrite"
+- Once this is done click on the "Import" button.
+
+This finishes the installation process.
+
+---------------------------
+Installing another language
+---------------------------
+
+By default the extension comes with the Spanish language, but it's possible to install other languages for the extension. Currently in the "languages" folder, of the zip file you downloaded, you will be able to find the following files:
+
+- vbulletin-mrsync-english-language.xml => This file contains translations for the English (US) language, but can be used as a base for any other language.
+
+The next step is to install this language file. In order to do that we will go to the "Languages & Phrases" menu. There we will select the "Download / Upload Languages". To the bottom you will see a table that indicates "Import Language XML File".
+
+You will see an option that says "EITHER upload the XML file from your computer", on it you will be able to search for the language file that's on your hard disk.
+
+Next we need to select the "Overwrite Language" and from the dropdown menu the language to overwrite, in this case "English (US)" and then click on the "Import" button. DON'T WORRY, THE OVERWRITTING WILL ONLY AFFECT THE MRSYNC PRODUCT.
+
+Once this is done, the MRSync extension will be translated to english.
+
+-------------------------
+Configuring the extension
+-------------------------
+
+Once the extension is installed we will be able to see a new menu to the left side. This new menu will be named MRSync, and we can open this menu as any other vBulletin menu. Inside this menu we will find the following options:
+
+- Settings
+- Sync users
+- Launch newsletters
+
+Select the first option, "Settings". This will carry us to a screen where we will need to fill the following data:
+
+- Host (this can be found in your Mailrelay welcome email)
+- User (this can be found in your Mailrelay welcome email)
+- Password (this can be found in your Mailrelay welcome email)
+
+- Enable auto user syncing for new users => enabling this option, when a user register in the forum, he/she will be automatically synced to your Mailrelay account.
+
+- Enable SMTP by Mailrelay => enabling this option when an email is sent from the forum, like when a user registers, it's sent user your Mailrelay account SMTP.
+
+Once the fields are filled, and saved, if you have selected the automatically sync vBulletin users option, a new form field will appear:
+
+- Select the Mailrelay groups to sync to
+
+This option will show all your Mailrelay groups. Select the groups or group you like. This way when a new user registers in the forum, and if the auto sync option is enabled, the user will be synced to the selected groups.
+
+----------
+Sync users
+----------
+
+Once we have saved the configuration, we will be able to use the extension for syncing our forum users with our Mailrelay account. For this we will select the "Sync users" menu option. This will show a new page with the following fields:
+
+- Host
+- User
+- Password
+
+These fields will be auto-filled with our previously saved configuration, so it's not necessary for us to fill anything. We will do click on the "Send" button, this will carry us to the following step in the sync process, where we will need to indicate the following options:
+
+
+- Select the vBulletin groups to sync. In this option we will select the groups of users we want to sync (administrators, moderators...), we can select any groups we want, or the all option.
+
+- In the second option we can select another kind of groups, social groups. Again we can select any group we want.
+
+- Last we can select to which ones of our Mailrelay groups we want to sync these users to.
+
+Selecting these options, in the way we want, we can have a total control over the sync process, and define the Mailrelay groups that we will later use when sending our newsletters.
+
+Once we have all the groups selected we will click on the "Send" button.
+
+On the next screen we will be able to see a progress bar, that shows how users are being synced, and how many remain.
+
+[ NOTE: this process can take some minutes, according to the number of users to sync ]
+
+In the last step of the sync process we will see a summary with the number of users synced.
+
+IMPORTANT: take into account that if a user has selected that she/he doesn't want to receive emails from the forum, in her/his account preferences, when the sync process is carried out the user will be removed. Of course the user will be removed from your Mailrelay account, not the forum itself. This helps users that don't want to receive notifications from the forum to also not receive newsletters related to the forum.
+
+-----------------
+Launch newsletter
+-----------------
+
+The third option of the Mailrelay extension is to "Launch newsletter" that let us launch a previously created newsletter, to the desired group. This option can help us in saving a bit of time.
+
+-------
+Plugins
+-------
+
+Additionally, the extension has two plugins, which perform the following:
+
+- Sync deleted users. When you delete a user from your vBulletin admin panel, the user will automatically be deleted from your Mailrelay account. Thus keeping your Mailrelay account always tidy.
+
+- Sync new users. When a new user registers in the forum, he/she will automatically be synced to your Mailrelay account. This way you don't have to re-do the sync process for each user that registers.
+
+---------
+Uninstall
+---------
+
+Uninstalling the extension is as easy as installing it. We only need to go to the "Plugins & products" menu, then select the menu "Manage products". In the same line where we can see the extension name, MRSync, we will see a dropdown menu, with the "Uninstall" option. Selecting this option, the extension, as well as its database tables and plugins will be uninstalled. It's possible that the files uploaded by FTP will remain there.
+
+----------------
+Additional notes
+----------------
+
+- If the users disable the option to "Receive emails from the forum team" from the menu "User" -> "Control panel" -> "General configuration" -> "Messaging and notifications2 -> "Receive emails from the forum team" they won't be synced. If they disable this option later, after being synced, they will be deleted from the Mailing Manager during the next sync.
+
+- This extension has been tested using vBulletin® Version 4.1.5 Patch Level 1
+
+- This software is provided by the copyright holders and contributors "AS IS" and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a paarticular purpose are disclaimed. In no event shall the copyright owner or contributors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data or profits, or bussiness interruption) however caused and on any theory of liability, wether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.

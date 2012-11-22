@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Installation settings for the MRSync extension
+ *
+ * @package MRSync for vBulletin
+ * @author Jose Argudo Blanco
+ * @website www.consultorpc.com
+ * @email jose@consultorpc.com
+ * @version 1.0.0
+ * @date 26/08/11
+ * @copyright ConsultorPC
+ * @license Proprietary
+-->
+<product productid="mrsync" active="1">
+    <title>MRSync</title>
+    <description>User syncronization to MailRelay account</description>
+    <version>1.1.0</version>
+    <url>http://mailrelay.com/es/herramientas-plugins</url>
+    <versioncheckurl>http://mailrelay.com/es/herramientas-plugins</versioncheckurl>
+    <dependencies>
+    </dependencies>
+    <codes>
+        <code version="1.1.0">
+            <installcode><![CDATA[$db->query("
+CREATE TABLE " . TABLE_PREFIX . "mrsync (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`hostname` VARCHAR( 255 ) NOT NULL ,
+`username` VARCHAR( 50 ) NOT NULL ,
+`password` VARCHAR( 50 ) NOT NULL ,
+`enableSMTP` TINYINT NOT NULL ,
+`enableAutoSync` TINYINT NOT NULL,
+`groupsToSyncNewUsers` VARCHAR( 255 ) NOT NULL 
+)
+");]]></installcode>
+            <uninstallcode><![CDATA[$db->query("
+            DROP TABLE " . TABLE_PREFIX . "mrsync
+            ");]]></uninstallcode>
+        </code>         
+    </codes>
+    <templates>
+    </templates>
+    <stylevardfns>
+    </stylevardfns>
+    <stylevars>
+    </stylevars>
+    <plugins>
+        <plugin active="1">
+            <title>Sync new user</title>
+            <hookname>register_addmember_complete</hookname>
+            <phpcode><![CDATA[require_once(DIR . '/includes/mrsync/plugins/sync_new_user_plugin.php');]]></phpcode>
+        </plugin> 
+        <plugin active="1">
+            <title>Sync delete user</title>
+            <hookname>userdata_delete</hookname>
+            <phpcode><![CDATA[require_once(DIR . '/includes/mrsync/plugins/sync_delete_user_plugin.php');]]></phpcode>
+        </plugin>         
+    </plugins>
+    <phrases>
+        <phrasetype name="GLOBAL" fieldname="global">
+            <phrase name="mrsync" date="1314085271" username="admin" version="1"><![CDATA[MRSync]]></phrase>
+            <phrase name="sync_users" date="1314085541" username="admin" version="1"><![CDATA[Sincronizar usuarios]]></phrase>
+
+            <phrase name="all_params_required" date="1314085541" username="admin" version="1"><![CDATA[Se requieren todos los parametros del formulario]]></phrase>
+            <phrase name="curl_fail" date="1314085541" username="admin" version="1"><![CDATA[No se pudo iniciar la conexión con el API]]></phrase>
+            <phrase name="api_key_fail" date="1314085541" username="admin" version="1"><![CDATA[Fallo al obtener acceso con sus datos]]></phrase>
+            <phrase name="no_groups_found" date="1314085541" username="admin" version="1"><![CDATA[No se encontraron grupos]]></phrase>
+            <phrase name="select_at_least_one_group" date="1314085541" username="admin" version="1"><![CDATA[Debe seleccionar al menos un grupo para sincronizar]]></phrase>
+            <phrase name="no_users_found_in_vbulletin" date="1314085541" username="admin" version="1"><![CDATA[No se encontraron usuarios en la base de datos de vBulletin]]></phrase>
+            <phrase name="sync_users_step_1" date="1314085541" username="admin" version="1"><![CDATA[Sincronización de usuarios. Paso 1 de 3 (validación)]]></phrase>
+            <phrase name="sync_warning" date="1314085541" username="admin" version="1"><![CDATA[Error]]></phrase>
+            <phrase name="mailrelay_user_sync" date="1314085541" username="admin" version="1"><![CDATA[Mailrelay, sincronización de usuarios vBulletin Versión 1.0.0 Fecha 26/08/11]]></phrase>
+            <phrase name="first_step_explanation" date="1314085541" username="admin" version="1"><![CDATA[Se van a utilizar los siguientes datos para validar el usuario en la API]]></phrase>
+            <phrase name="sync_send" date="1314085541" username="admin" version="1"><![CDATA[Enviar]]></phrase>
+            <phrase name="sync_users_step_2" date="1314085541" username="admin" version="1"><![CDATA[Sincronización de usuarios. Paso 2 de 3 (Selección de grupos)]]></phrase>
+            <phrase name="second_step_explanation" date="1314085541" username="admin" version="1"><![CDATA[El segundo paso es seleccionar los grupos hacia los que desea sincronizar:<br/><br/>]]></phrase>
+            <phrase name="sync_host" date="1314085541" username="admin" version="1"><![CDATA[Host:]]></phrase>
+            <phrase name="sync_user" date="1314085541" username="admin" version="1"><![CDATA[Usuario:]]></phrase>
+            <phrase name="sync_pass" date="1314085541" username="admin" version="1"><![CDATA[Password:]]></phrase>
+            <phrase name="sync_groups" date="1314085541" username="admin" version="1"><![CDATA[Selecciona grupos de destino en Mailrelay:]]></phrase>            
+            <phrase name="sync_vbulletin_groups" date="1314085541" username="admin" version="1"><![CDATA[Selecciona los grupos de vBulletin para sincronizar:]]></phrase>
+            <phrase name="sync_vbulletin_social_groups" date="1314085541" username="admin" version="1"><![CDATA[Selecciona los grupos sociales de vBulletin para sincronizar:]]></phrase>
+            <phrase name="sync_result" date="1314085541" username="admin" version="1"><![CDATA[El resultado de la sincronización fue:]]></phrase>
+            <phrase name="synced_new_users" date="1314085541" username="admin" version="1"><![CDATA[Se sincronizaron: ]]></phrase>
+            <phrase name="synced_updated_users" date="1314085541" username="admin" version="1"><![CDATA[Se actualizaron: ]]></phrase>
+            <phrase name="sync_new_users_text" date="1314085541" username="admin" version="1"><![CDATA[ nuevos usuarios]]></phrase>
+            <phrase name="sync_update_users_text" date="1314085541" username="admin" version="1"><![CDATA[ usuarios ya existentes]]></phrase>
+            <phrase name="sync_can_administer" date="1314085541" username="admin" version="1"><![CDATA[Necesita permisos de administrador para poder utilizar esta extensión]]></phrase>
+            <phrase name="sync_settings" date="1314085541" username="admin" version="1"><![CDATA[Configuración]]></phrase>
+            <phrase name="no_settings_found" date="1314085541" username="admin" version="1"><![CDATA[No existen datos de configuración guardados, debe crearlos primero]]></phrase>
+            <phrase name="settings_saved" date="1314085541" username="admin" version="1"><![CDATA[La configuración se ha guardado correctamente]]></phrase>
+            <phrase name="settings_not_saved" date="1314085541" username="admin" version="1"><![CDATA[La configuración NO se ha podido guardar]]></phrase>
+            <phrase name="settings_not_saved_incorrect_conection" date="1314085541" username="admin" version="1"><![CDATA[La configuración NO se ha guardado. No se pudo conectar a la API con los datos proporcionados]]></phrase>
+            <phrase name="mrsync_options" date="1314085541" username="admin" version="1"><![CDATA[Opciones de MRSync]]></phrase>
+            <phrase name="mrsync_settings_mr_data" date="1314085541" username="admin" version="1"><![CDATA[Datos de validación de la cuenta Mailrelay]]></phrase>
+            <phrase name="mrsync_autosync_users" date="1314085541" username="admin" version="1"><![CDATA[Auto sincronizar nuevos usuarios]]></phrase>
+            <phrase name="mrsync_enable_autosync_users" date="1314085541" username="admin" version="1"><![CDATA[Habilitar auto sincronización de usuarios nuevos]]></phrase>
+            <phrase name="mrsync_smtp_explanation" date="1314085541" username="admin" version="1"><![CDATA[Además es posible habilitar el envio de correos de vBulletin (altas de usuarios etc) desde Mailrelay: <br/><br/>]]></phrase>            
+            <phrase name="mrsync_smtp_enable" date="1314085541" username="admin" version="1"><![CDATA[Habilitar envio SMTP por Mailrelay]]></phrase>            
+            <phrase name="mrsync_sync_in_process" date="1314085541" username="admin" version="1"><![CDATA[Los usuarios están siendo sincronizados en este momento]]></phrase>
+            <phrase name="sync_launch" date="1314085541" username="admin" version="1"><![CDATA[Lanzar boletín]]></phrase>
+            <phrase name="function_fetch_userinfo_not_available" date="1314085541" username="admin" version="1"><![CDATA[La función fetch_userinfo no está disponible. No se puede consultar la información del usuario.]]></phrase>
+            <phrase name="groups_the_campaign_is_sent_to" date="1314085541" username="admin" version="1"><![CDATA[, grupos a los que se envia: ]]></phrase>
+            <phrase name="campaign_successfully_launched" date="1314085541" username="admin" version="1"><![CDATA[La campaña se lanzó correctamente]]></phrase>
+            <phrase name="there_was_a_problem_launching_the_campaign" date="1314085541" username="admin" version="1"><![CDATA[Hubo algún problema y no se pudo lanzar la campaña. Por favor vuelva a intentarlo.]]></phrase>            
+            <phrase name="list_available_campaigns" date="1314085541" username="admin" version="1"><![CDATA[Listado de campañas disponibles en el Mailing Manager]]></phrase>
+            <phrase name="launch_previously_created_campaign" date="1314085541" username="admin" version="1"><![CDATA[Lanzar un boletín ya creado]]></phrase>
+            <phrase name="select_campaign_to_launch" date="1314085541" username="admin" version="1"><![CDATA[Puedes seleccionar uno de los boletines disponibles para lanzarlo. Recuerda sincronizar antes los usuarios para asegurarte de que llegue a todos.]]></phrase>
+            <phrase name="select_campaign_element" date="1314085541" username="admin" version="1"><![CDATA[Selecciona el boletín que desees enviar:]]></phrase>
+            <phrase name="select_campaign_launch_groups" date="1314085541" username="admin" version="1"><![CDATA[A que grupos deseas enviar el boletín. Si no seleccionas ningún grupo se enviara a los actuales. Esto modificará tambien la configuración de la campaña en tu cuenta de Mailrelay]]></phrase>
+            <phrase name="campaign_launch_groups" date="1314085541" username="admin" version="1"><![CDATA[Grupos:]]></phrase>
+            <phrase name="campaign_launch_summary" date="1314085541" username="admin" version="1"><![CDATA[Resumen del lanzamiento de la campaña]]></phrase>
+            <phrase name="campaign_launch_result" date="1314085541" username="admin" version="1"><![CDATA[Resultado del lanzamiento de la campaña:]]></phrase>
+            <phrase name="deleted_synced_users" date="1314085541" username="admin" version="1"><![CDATA[Usuarios eliminados (desactivaron Recibir Correo del Equipo del Foro)]]></phrase>
+            
+            <phrase name="dont_close_window" date="1314085541" username="admin" version="1"><![CDATA[. Por favor no cierre esta pantalla hasta que finalice:]]></phrase>
+            <phrase name="syncing" date="1314085541" username="admin" version="1"><![CDATA[Sincronizando]]></phrase>
+            <phrase name="users_of_a_total_of" date="1314085541" username="admin" version="1"><![CDATA[usuarios de un total de]]></phrase>
+            <phrase name="processing" date="1314085541" username="admin" version="1"><![CDATA[Procesando]]></phrase>
+        </phrasetype>
+    </phrases>
+    <options>
+    </options>
+    <helptopics>
+    </helptopics>
+    <cronentries>
+    </cronentries>
+    <faqentries>
+    </faqentries>
+</product>
