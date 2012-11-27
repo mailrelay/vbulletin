@@ -142,7 +142,7 @@ class SyncDeleteUser
         $headers = array(
                 'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
         );
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($this->_curl);
 
@@ -175,7 +175,7 @@ class SyncDeleteUser
         $headers = array(
                 'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
         );
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($this->_curl);
 
@@ -211,7 +211,7 @@ class SyncDeleteUser
             $headers = array(
                 'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
             );
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
             $result = curl_exec($this->_curl);    
 
