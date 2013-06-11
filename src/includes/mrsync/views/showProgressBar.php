@@ -25,8 +25,6 @@ construct_hidden_code('vBulletinGroups[]', $vBulletinGroups);
 construct_hidden_code('vBulletinSocialGroups[]', $vBulletinSocialGroups);
 construct_hidden_code('groups[]', $groups);
 construct_hidden_code('hostname', $hostname);
-construct_hidden_code('username', $username);
-construct_hidden_code('password', $password);
 construct_hidden_code('apiKey', $apiKey);
 
 $page = $page + $limit;

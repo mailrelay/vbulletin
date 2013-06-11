@@ -31,56 +31,54 @@ if ( $status == 'development' ) {
 class SyncNewUser
 {
     private $_validSync = 1;
-    
+
     private $_username = '';
     private $_email = '';
     private $_db;
     private $_curl;
     private $_apiKey;
     private $_settings;
-    
+
     /**
      * Username and email come from the register page http://www.yourvBulletin.com/register.php
      * See product-mrsync.xml for details about when this code is called
-     * 
+     *
      * @param string $username The username to be synced
      * @param string $email The email of the user to be synced
      * @param resource $db The vBulletin database resource
      */
-    public function __construct( $username = '', $email = '', $db = '' ) 
+    public function __construct( $username = '', $email = '', $db = '' )
     {
         $this->_username = $username;
         $this->_email = $email;
         $this->_db = $db;
-        
+
         if ($this->_email == '' && $this->_username == '') {
             $this->_validSync = 0;
         }
-        
+
         $this->getSettings();
     }
-    
+
     /**
      * Return the curren status of the is validSync variable
-     * 
-     * @return integer 
+     *
+     * @return integer
      */
     public function getIfValid()
     {
         return $this->_validSync;
     }
-    
+
     /**
      * Try getting the configuration from the mrsync database table
-     * 
+     *
      * @return array
      */
     private function getSettings()
     {
-        $settings = $this->_db->query_first("
-            SELECT id, enableAutoSync, hostname, password, username, enableAutoSync, groupsToSyncNewUsers
-            FROM " . TABLE_PREFIX . "mrsync");
-        
+        $settings = $this->_db->query_first("SELECT `id`, `hostname`, `key`, `enableAutoSync`, `groupsToSyncNewUsers` FROM " . TABLE_PREFIX . "mrsync");
+
         if ( is_array($settings) && count($settings) > 0 ) {
             $this->_settings = $settings;
         } else {
@@ -88,97 +86,66 @@ class SyncNewUser
             return null;
         }
     }
-    
+
     /**
      * Try to get the default groups to sync, if not found, return ALL
-     * 
+     *
      * @param array $settings The settings array from mrsync table
-     * @return string 
+     * @return string
      */
     private function getSyncGroups($settings = array())
     {
         $groups = unserialize($settings['groupsToSyncNewUsers']);
-        
+
         if (!empty($groups) && count($groups) > 0) {
             return $groups;
         } else {
             // There are no groups selected for syncing
             return 'ALL';
-        }        
+        }
     }
-    
+
     /**
      * Validate if all required settings are present, before syncing
-     * 
+     *
      * @param array $settings The settings found in the mrsync table
      * @return integer
      */
     private function checkSyncSettings($settings = array())
     {
-        if (!empty($settings['hostname']) && !empty($settings['password']) && !empty($settings['username']) && $settings['hostname'] != '' && $settings['password'] != '' && $settings['username'] != '') {
+        if (!empty($settings['hostname']) && !empty($settings['key']) && $settings['hostname'] != '' && $settings['key'] != '') {
             return 1;
         } else {
             return 0;
         }
     }
-    
+
     /**
      * Prepare curl conection
-     * 
+     *
      * @param string $hostname MR host name
+     * @param string $apiKey MR API key
      * @return curl
      */
-    private function initCurl( $hostname = '')
-    {        
+    private function initCurl($hostname = '', $apiKey = '')
+    {
         $url = 'http://'. $hostname .'/ccm/admin/api/version/2/&type=json';
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
-               
+
         if ( $curl == null ) {
             $this->_validSync = 0;
         } else {
             $this->_curl = $curl;
-        }        
+        }
+
+        $this->_apiKey = $apiKey;
     }
-    
-    /**
-     * Get the apiKey of the MR account, this is required for syncing to happen
-     * 
-     * @param string $username The MR user name
-     * @param string $password The MR user password
-     * @return bool 
-     */
-    private function getApiKey($username = '', $password = '')
-    {
-        $params = array(
-            'function' => 'doAuthentication',
-            'username' => $username,
-            'password' => $password
-        ); 
 
-        curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
-
-        $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
-        );
-        curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($this->_curl);
-
-        $jsonResult = json_decode($result);
-
-        if (!$jsonResult->status) {
-            return FALSE;
-        } else {
-            $this->_apiKey = $jsonResult->data;
-            return TRUE;
-        }        
-    }
-    
     /**
      * Get all the groups from the MR
-     * 
+     *
      * @return array
      */
     private function getMailrelayGroups()
@@ -191,7 +158,7 @@ class SyncNewUser
         curl_setopt( $this->_curl, CURLOPT_POSTFIELDS, $params );
 
         $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
         );
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
@@ -202,34 +169,34 @@ class SyncNewUser
             $groups = '';
         } else {
             $groups = $jsonResult->data;
-        }  
-        
+        }
+
         return $groups;
     }
-    
+
     /**
      * Prepares the groups array to be used in the sync process
-     * 
+     *
      * @param array $groups The array of groups to be synced
-     * @return array 
+     * @return array
      */
     private function prepareGroups($groups=array())
     {
         $groupsToSync = array();
-        
+
         foreach ( $groups AS $group ) {
             if ( $group->enable == 1 AND $group->visible == 1) {
                 $groupsToSync[] = $group->id;
             }
-        }        
-        
+        }
+
         return $groupsToSync;
     }
-    
+
     /**
      * Checks if the user is already present in the MR
-     * 
-     * @return StdClass 
+     *
+     * @return StdClass
      */
     private function checkIfUserAlreadyExists()
     {
@@ -243,31 +210,31 @@ class SyncNewUser
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
 
         $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
         );
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($this->_curl);
 
-        $jsonResult = json_decode($result);	
+        $jsonResult = json_decode($result);
 
         if (!$jsonResult->status) {
             return new StdClass;
         } else {
             $data = $jsonResult->data;
             return $data[0];
-        }        
+        }
     }
-    
+
     /**
      * Update an already existing user in the MR
-     * 
+     *
      * @param integer $id ID of the MR user to be updated
      * @param array $groupsToSync Array of groups to be synced
-     * @return integer 
+     * @return integer
      */
     private function updateSubscriber($id = 0, $groupsToSync = array())
-    {        
+    {
         $params = array(
             'function' => 'updateSubscriber',
             'apiKey' => $this->_apiKey,
@@ -277,33 +244,33 @@ class SyncNewUser
             'groups' => $groupsToSync
         );
 
-        $post = http_build_query($params);			
+        $post = http_build_query($params);
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
         $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
         );
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
-        $result = curl_exec($this->_curl);    
-        
+        $result = curl_exec($this->_curl);
+
         $jsonResult = json_decode($result);
-        
+
         if ( $jsonResult->status ) {
             return 1;
         } else {
             return 0;
         }
     }
-    
+
     /**
      * Add a new user to the MR
-     * 
+     *
      * @param array $groupsToSync Array of groups to be synced
-     * @return integer 
+     * @return integer
      */
     private function addSubscriber($groupsToSync = array())
-    {        
+    {
         $params = array(
             'function' => 'addSubscriber',
             'apiKey' => $this->_apiKey,
@@ -312,26 +279,26 @@ class SyncNewUser
             'groups' => $groupsToSync
         );
 
-        $post = http_build_query($params);			
+        $post = http_build_query($params);
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
         $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
         );
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
-        $result = curl_exec($this->_curl); 
-        
+        $result = curl_exec($this->_curl);
+
         $jsonResult = json_decode($result);
-                
+
         if ( $jsonResult->status ) {
             return 1;
         } else {
             return 0;
         }
     }
-    
-    
+
+
     /**
      * Main syncing process
      */
@@ -341,12 +308,12 @@ class SyncNewUser
 
             $groupsToSync = $this->getSyncGroups($this->_settings);
             $checkSyncSettings = $this->checkSyncSettings($this->_settings);
-            
+
             if ($this->checkSyncSettings($this->_settings)) {
 
-                $this->initCurl($this->_settings['hostname']);
-                
-                if ($this->_validSync && $this->getApiKey($this->_settings['username'], $this->_settings['password'])) {
+                $this->initCurl($this->_settings['hostname'], $this->_settings['key']);
+
+                if ($this->_validSync && $this->_apiKey != '') {
 
                     if ($groupsToSync == 'ALL') {
                         $groups = $this->getMailrelayGroups();
@@ -360,9 +327,9 @@ class SyncNewUser
                     }else{
                         $result = $this->addSubscriber($groupsToSync);
                     }
-                } 
-            } 
-        }            
+                }
+            }
+        }
     } // End public function Sync()
 }
 

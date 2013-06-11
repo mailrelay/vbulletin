@@ -14,7 +14,7 @@ Let's start with the installation process:
 First required step
 -------------------
 
-The first step, in order for us to be able to use the extension, is to enable the API key of our Mailrelay account. For that we need to log in our Mailrelay account admin panel. Once we are there we will go to the "Settings" menu, then "API access". On that screen click on the "Generate new API key" button. It's not necessary for us to write down this key, once it's generated, the extension will be able to get it using your user and password data.
+The first step, in order for us to be able to use the extension, is to enable the API key of our Mailrelay account. For that we need to log in our Mailrelay account admin panel. Once we are there we will go to the "Settings" menu, then "API access". On that screen click on the "Generate new API key" button.
 
 ----------------------------------------
 Upload the necessary files to the server
@@ -75,12 +75,14 @@ Once the extension is installed we will be able to see a new menu to the left si
 Select the first option, "Settings". This will carry us to a screen where we will need to fill the following data:
 
 - Host (this can be found in your Mailrelay welcome email)
-- User (this can be found in your Mailrelay welcome email)
-- Password (this can be found in your Mailrelay welcome email)
+- Clave API (the API key from your Mailrelay account)
 
 - Enable auto user syncing for new users => enabling this option, when a user register in the forum, he/she will be automatically synced to your Mailrelay account.
 
 - Enable SMTP by Mailrelay => enabling this option when an email is sent from the forum, like when a user registers, it's sent user your Mailrelay account SMTP.
+
+- SMTP User (SMTP user for vBulletin from your Mailrelay account)
+- SMTP Password (SMTP password for vBulletin from your Mailrelay account)
 
 Once the fields are filled, and saved, if you have selected the automatically sync vBulletin users option, a new form field will appear:
 
@@ -95,8 +97,7 @@ Sync users
 Once we have saved the configuration, we will be able to use the extension for syncing our forum users with our Mailrelay account. For this we will select the "Sync users" menu option. This will show a new page with the following fields:
 
 - Host
-- User
-- Password
+- API key
 
 These fields will be auto-filled with our previously saved configuration, so it's not necessary for us to fill anything. We will do click on the "Send" button, this will carry us to the following step in the sync process, where we will need to indicate the following options:
 

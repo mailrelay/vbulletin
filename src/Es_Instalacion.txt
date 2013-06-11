@@ -8,13 +8,13 @@ Tras su instalación dispondrá de nuevo menú en el panel izquierdo, que le permit
 
 Además la extensión le ofrece algunas ventajas adicionales, como sincronizar nuevos usuarios de forma automática o enviar todos los correos del foro utilizando la cuenta SMTP de Mailrelay.
 
-Comencemos con el proceso de instalación: 
+Comencemos con el proceso de instalación:
 
 ---------------------
 Primer paso requerido
 ---------------------
 
-El primer paso para poder utilizar esta extensión es habilitar la clave de API en su cuenta de Mailrelay. Para ello debe acceder a su panel de Mailrelay. Una vez ahí acceda al menú 'Configuración', submenú 'Acceso a la API' y haga clic en el botón 'Generar nueva clave API'. No es necesario que anote esta clave, una vez generada, la extensión podrá acceder a ella utilizando su usuario y contraseña.
+El primer paso para poder utilizar esta extensión es habilitar la clave de API en su cuenta de Mailrelay. Para ello debe acceder a su panel de Mailrelay. Una vez ahí acceda al menú 'Configuración', submenú 'Acceso a la API' y haga clic en el botón 'Generar nueva clave API'.
 
 -----------------------------------------
 Subir al servidor los archivos necesarios
@@ -59,12 +59,14 @@ Una vez instalada la extensión dispondremos de una nueva opción de menú en el la
 Seleccione la primera opción, "Configuración". Esto nos llevará a una pantalla donde deberemos rellenar los siguientes datos:
 
 - Host (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
-- Usuario (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
-- Password (este dato lo puede encontrar en su email de bienvenida a Mailrelay)
+- API key (la clave API de tu cuenta de Mailrelay)
 
 - Habilitar auto sincronización de usuarios nuevos => habilitando esta opción, cuando un usuario se registra en el foro, automáticamente se sincroniza con su cuenta Mailrelay.
 
 - Habilitar envio SMTP por Mailrelay => con esta opción habilitada todos los correos que se envien desde el foro, como cuando un nuevo usuario se registra, se envian utilizando la cuenta smtp de Mailrelay.
+
+- Usuario SMTP (usuario SMTP para vBulletin de la cuenta Mailrelay)
+- Password SMTP (password SMTP para vBulletin de la cuenta Mailrelay)
 
 Una vez rellenados estos campos, y guardados, si ha seleccionado la opción de auto sincronización de usuarios nuevos, aparecerá una nueva opción:
 
@@ -79,8 +81,7 @@ Sincronizar usuarios
 Una vez hayamos guardado esta configuración, podremos utilizar la extensión para sincronizar los usuarios de nuestro foro, con nuestra cuenta de Mailrelay. Para ello seleccionaremos la opción de menú "Sincronizar usuarios". Esto le mostrará una página con las siguientes opciones:
 
 - Host
-- Usuario
-- Password
+- Clave API
 
 Estos campos habrán sido rellenados con la configuración previamente guardada, de forma que no será necesario que rellenemos nada. Haremos clic en el botón "Enviar", lo que nos llevará al segundo paso de la sincronización, donde deberemos indicar las siguientes opciones:
 
@@ -92,7 +93,7 @@ Estos campos habrán sido rellenados con la configuración previamente guardada, d
 
 Seleccionando estas opciones, de la forma que deseemos, podemos tener un control total sobre la sincronización, y definir los grupos en Mailrelay que posteriormente utilizaremos en los envios de boletines.
 
-Haremos nuevamente clic en el botón "Enviar". 
+Haremos nuevamente clic en el botón "Enviar".
 
 Veremos la siguiente pantalla, que simplemente nos muestra el proceso de sincronización. Muestra una barra de progreso, el número de usuarios sincronizados y el total.
 
@@ -106,7 +107,7 @@ IMPORTANTE: tenga en cuenta que si un usuario ha seleccionado que no desea recib
 Lanzar boletín
 --------------
 
-La tercera opción "Lanzar boletín" nos permite lanzar un boletín, previamente creado, al grupo que deseemos. Se trata simplemente de una comodidad que nos puede ahorrar algo de tiempo. 
+La tercera opción "Lanzar boletín" nos permite lanzar un boletín, previamente creado, al grupo que deseemos. Se trata simplemente de una comodidad que nos puede ahorrar algo de tiempo.
 
 -------
 Plugins
@@ -130,6 +131,6 @@ Notas finales
 
 - Si los usuarios deshabilitan 'Recibir Correo del Equipo del Foro' del menú 'Usuario' -> 'Panel de control' -> 'Configuración general' -> 'Mensajería y notificaciones' -> 'Recibir correo del equipo del foro' no se sincronizarán. Si lo deshabilitan posteriormente a haber sido sincronizados serán borrados del Mailing Manager en la próxima sincronización.
 
-- Esta extensión ha sido probada en la versión vBulletin® Version 4.1.5 Patch Level 1 . 
+- Esta extensión ha sido probada en la versión vBulletin® Version 4.1.5 Patch Level 1 .
 
 - Este software se proporciona "TAL CUAL" por los propietarios del copyright, y con ningun garantía expresa o implícita, incluyendo, pero no limitado a, las garantías de comercialización y aptitud para un proposito en particular. En ningún caso el propietario del copyright o los colaborados serán responsables por daños directos, indirectos, accidentales, especiales, ejemplares o derivados (incluyendo, sin limitaciones a la obtención de bienes o servicios, la pérdida de uso, de datos o de beneficios; o interrupción de negocio), de cualquier causa a partir del uso de este software, incluso si se ha advertido de la posibilidad de tales daños.

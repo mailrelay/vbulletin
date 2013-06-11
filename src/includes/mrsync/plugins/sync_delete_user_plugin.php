@@ -32,53 +32,51 @@ if ( $status == 'development' ) {
 class SyncDeleteUser
 {
     private $_validSync = 1;
-    
+
     private $_email = '';
     private $_db;
     private $_curl;
     private $_apiKey;
     private $_settings;
-    
+
     /**
      * Username and email come from the register page http://www.yourvBulletin.com/register.php
      * See product-mrsync.xml for details about when this code is called
-     * 
+     *
      * @param string $email The email of the user to be synced
      * @param resource $db The vBulletin database resource
      */
-    public function __construct($email = '', $db = '') 
+    public function __construct($email = '', $db = '')
     {
         $this->_email = $email;
         $this->_db = $db;
-        
+
         if ($this->_email == '') {
             $this->_validSync = 0;
         }
-        
+
         $this->getSettings();
     }
-    
+
     /**
      * Return the current status of the is validSync variable
-     * 
-     * @return integer 
+     *
+     * @return integer
      */
     public function getIfValid()
     {
         return $this->_validSync;
     }
-    
+
     /**
      * Try getting the configuration from the mrsync database table
-     * 
+     *
      * @return array
      */
     private function getSettings()
     {
-        $settings = $this->_db->query_first("
-            SELECT id, enableAutoSync, hostname, password, username, enableAutoSync, groupsToSyncNewUsers
-            FROM " . TABLE_PREFIX . "mrsync");
-        
+        $settings = $this->_db->query_first("SELECT `id`, `hostname`, `key`, `enableAutoSync`, `groupsToSyncNewUsers` FROM " . TABLE_PREFIX . "mrsync");
+
         if ( is_array($settings) && count($settings) > 0 ) {
             $this->_settings = $settings;
         } else {
@@ -86,80 +84,49 @@ class SyncDeleteUser
             return null;
         }
     }
-   
+
     /**
      * Validate if all required settings are present, before syncing
-     * 
+     *
      * @param array $settings The settings found in the mrsync table
      * @return integer
      */
     private function checkSyncSettings($settings = array())
     {
-        if (!empty($settings['hostname']) && !empty($settings['password']) && !empty($settings['username']) && $settings['hostname'] != '' && $settings['password'] != '' && $settings['username'] != '') {
+        if (!empty($settings['hostname']) && !empty($settings['key']) && $settings['hostname'] != '' && $settings['key'] != '') {
             return 1;
         } else {
             return 0;
         }
     }
-    
+
     /**
      * Prepare curl conection
-     * 
+     *
      * @param string $hostname MR host name
+     * @param string $apiKey MR API key
      * @return curl
      */
-    private function initCurl( $hostname = '')
-    {        
+    private function initCurl($hostname = '', $apiKey = '')
+    {
         $url = 'http://'. $hostname .'/ccm/admin/api/version/2/&type=json';
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
-               
+
         if ( $curl == null ) {
             $this->_validSync = 0;
         } else {
             $this->_curl = $curl;
-        }        
+        }
+
+        $this->_apiKey = $apiKey;
     }
-    
-    /**
-     * Get the apiKey of the MR account, this is required for syncing to happen
-     * 
-     * @param string $username The MR user name
-     * @param string $password The MR user password
-     * @return bool 
-     */
-    private function getApiKey($username = '', $password = '')
-    {
-        $params = array(
-            'function' => 'doAuthentication',
-            'username' => $username,
-            'password' => $password
-        ); 
 
-        curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
-
-        $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
-        );
-        curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($this->_curl);
-
-        $jsonResult = json_decode($result);
-
-        if (!$jsonResult->status) {
-            return FALSE;
-        } else {
-            $this->_apiKey = $jsonResult->data;
-            return TRUE;
-        }        
-    }
-        
     /**
      * Checks if the user is already present in the MR
-     * 
-     * @return StdClass 
+     *
+     * @return StdClass
      */
     private function checkIfUserAlreadyExists()
     {
@@ -173,59 +140,59 @@ class SyncDeleteUser
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
 
         $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
         );
         curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($this->_curl);
 
-        $jsonResult = json_decode($result);	
+        $jsonResult = json_decode($result);
 
         if (!$jsonResult->status) {
             return new StdClass;
         } else {
             $data = $jsonResult->data;
             return $data[0];
-        }        
+        }
     }
-    
+
     /**
      * Removes a user from the MR
-     * 
+     *
      * @param object $user A user object got from the MR
      */
-    private function removeUser($user = null) 
-    {              
+    private function removeUser($user = null)
+    {
 
         if (is_object($user) && $user->id > 0) {
-            
+
             $params = array(
                 'function' => 'deleteSubscriber',
                 'apiKey' => $this->_apiKey,
                 'email' => $user->email
             );
 
-            $post = http_build_query($params);			
+            $post = http_build_query($params);
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
             $headers = array(
-                'X-Request-Origin: Vbulletin|1.0.0|'.SIMPLE_VERSION
+                'X-Request-Origin: Vbulletin|1.1.0|'.SIMPLE_VERSION
             );
             curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
-            $result = curl_exec($this->_curl);    
+            $result = curl_exec($this->_curl);
 
             $jsonResult = json_decode($result);
 
             if ( $jsonResult->status ) {
                 return 1;
-            }           
+            }
 
         }
-        
+
         return 0;
     }
-    
+
     /**
      * Main syncing process
      */
@@ -234,18 +201,18 @@ class SyncDeleteUser
         if ($this->_validSync && is_array($this->_settings) && $this->_settings['enableAutoSync'] == '1') {
 
             $checkSyncSettings = $this->checkSyncSettings($this->_settings);
-            
+
             if ($this->checkSyncSettings($this->_settings)) {
 
-                $this->initCurl($this->_settings['hostname']);
-                
-                if ($this->_validSync && $this->getApiKey($this->_settings['username'], $this->_settings['password'])) {
+                $this->initCurl($this->_settings['hostname'], $this->_settings['key']);
+
+                if ($this->_validSync && $this->_apiKey != '') {
 
                     $this->removeUser($this->checkIfUserAlreadyExists());
 
-                } 
-            } 
-        }            
+                }
+            }
+        }
     } // End public function Sync()
 }
 

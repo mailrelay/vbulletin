@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
  * Phrase translations for the MRSync extension
- * 
+ *
  * @package MRSync for vBulletin
  * @author Jose Argudo Blanco
  * @website www.consultorpc.com
@@ -46,8 +46,7 @@
         <phrase name="sync_users_step_2" date="1314085541" username="admin" version="1"><![CDATA[User sync. Step 2 of 3 (Group select)]]></phrase>
         <phrase name="second_step_explanation" date="1314085541" username="admin" version="1"><![CDATA[The second step is selecting the groups to sync to:<br/><br/>]]></phrase>
         <phrase name="sync_host" date="1314085541" username="admin" version="1"><![CDATA[Host:]]></phrase>
-        <phrase name="sync_user" date="1314085541" username="admin" version="1"><![CDATA[User:]]></phrase>
-        <phrase name="sync_pass" date="1314085541" username="admin" version="1"><![CDATA[Password:]]></phrase>
+        <phrase name="sync_api_key" date="1314085541" username="admin" version="1"><![CDATA[API key:]]></phrase>
         <phrase name="sync_groups" date="1314085541" username="admin" version="1"><![CDATA[Select the Mailrelay groups to sync to:]]></phrase>
         <phrase name="sync_vbulletin_groups" date="1314085541" username="admin" version="1"><![CDATA[Select the vBulletin groups to sync:]]></phrase>
         <phrase name="sync_vbulletin_social_groups" date="1314085541" username="admin" version="1"><![CDATA[Select the vBulletin social groups to sync:]]></phrase>
@@ -68,6 +67,8 @@
         <phrase name="mrsync_enable_autosync_users" date="1314085541" username="admin" version="1"><![CDATA[Enable auto user syncing for new users]]></phrase>
         <phrase name="mrsync_smtp_explanation" date="1314085541" username="admin" version="1"><![CDATA[It's also possible to enable SMTP email sending, for all vBulletin emails, to be sent using your Mailrelay account user data: <br/><br/>]]></phrase>
         <phrase name="mrsync_smtp_enable" date="1314085541" username="admin" version="1"><![CDATA[Enable SMTP by Mailrelay]]></phrase>
+        <phrase name="mrsync_smtp_user" date="1314085541" username="admin" version="1"><![CDATA[SMTP User]]></phrase>
+        <phrase name="mrsync_smtp_pass" date="1314085541" username="admin" version="1"><![CDATA[SMTP Password]]></phrase>
         <phrase name="mrsync_sync_in_process" date="1314085541" username="admin" version="1"><![CDATA[Users are being synced at this momment]]></phrase>
         <phrase name="sync_launch" date="1314085541" username="admin" version="1"><![CDATA[Launch newsletter]]></phrase>
         <phrase name="function_fetch_userinfo_not_available" date="1314085541" username="admin" version="1"><![CDATA[Function fetch_userinfo is not available. Can not check userinfo.]]></phrase>
@@ -83,10 +84,10 @@
         <phrase name="campaign_launch_summary" date="1314085541" username="admin" version="1"><![CDATA[Summary of campaign launch]]></phrase>
         <phrase name="campaign_launch_result" date="1314085541" username="admin" version="1"><![CDATA[Result of campaign lauch:]]></phrase>
         <phrase name="deleted_synced_users" date="1314085541" username="admin" version="1"><![CDATA[Deleted users (Users who disabled the option to receive emails from the forum)]]></phrase>
-        
+
             <phrase name="dont_close_window" date="1314085541" username="admin" version="1"><![CDATA[. Please don't close this window until syncing ends:]]></phrase>
             <phrase name="syncing" date="1314085541" username="admin" version="1"><![CDATA[Syncing]]></phrase>
             <phrase name="users_of_a_total_of" date="1314085541" username="admin" version="1"><![CDATA[users of a total of ]]></phrase>
-            <phrase name="processing" date="1314085541" username="admin" version="1"><![CDATA[Processing]]></phrase>       
+            <phrase name="processing" date="1314085541" username="admin" version="1"><![CDATA[Processing]]></phrase>
     </phrasetype>
 </language>
