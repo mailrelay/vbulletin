@@ -30,7 +30,7 @@ require_once(DIR . '/includes/mrsync/mrsyncInit.php');
          // Authenticate the user against the API
          // Get all existing groups
         try {
-            list( $hostname, $apiKey ) = array( $_REQUEST['hostname'], $_REQUEST['key'] );
+            list( $hostname, $apiKey ) = array( trim($_REQUEST['hostname']), trim($_REQUEST['key']) );
 
             $mrsyncController->checkRequiredFormValues( $hostname, $apiKey );
             $mrsyncController->initCurl( $hostname, $apiKey );

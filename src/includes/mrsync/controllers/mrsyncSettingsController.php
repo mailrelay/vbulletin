@@ -155,10 +155,12 @@ class mrsyncSettingsController
      */
     public function checkAbleToConnect($hostname = '', $apiKey = '')
     {
-        $url = 'http://'. $hostname .'/ccm/admin/api/version/2/&type=json';
+        $url = 'https://'. $hostname .'/ccm/admin/api/version/2/&type=json';
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 3);
 
         $params = array(
             'function' => 'getStats',
@@ -192,16 +194,16 @@ class mrsyncSettingsController
      */
     public function saveAction( $_REQUEST )
     {
-        $hostname = $_REQUEST['hostname'];
-        $apiKey   = $_REQUEST['key'];
+        $hostname = trim($_REQUEST['hostname']);
+        $apiKey   = trim($_REQUEST['key']);
 
         if ($this->checkAbleToConnect($hostname, $apiKey)) {
 
             $enableAutoSync = $this->boolToInt( $_REQUEST['enableAutoSync'] );
             $groups = $_REQUEST['groups'];
             $enableSMTP = $this->boolToInt( $_REQUEST['enableSMTP'] );
-            $smtpUser = $_REQUEST['smtpUser'];
-            $smtpPass = $_REQUEST['smtpPass'];
+            $smtpUser = trim($_REQUEST['smtpUser']);
+            $smtpPass = trim($_REQUEST['smtpPass']);
 
             if ($hostname != '' && $apiKey != '') {
                 $this->_mrsyncController->initCurl($hostname, $apiKey);

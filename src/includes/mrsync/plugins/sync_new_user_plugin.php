@@ -129,10 +129,12 @@ class SyncNewUser
      */
     private function initCurl($hostname = '', $apiKey = '')
     {
-        $url = 'http://'. $hostname .'/ccm/admin/api/version/2/&type=json';
+        $url = 'https://'. $hostname .'/ccm/admin/api/version/2/&type=json';
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 3);
 
         if ( $curl == null ) {
             $this->_validSync = 0;
