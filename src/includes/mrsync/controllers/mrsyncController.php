@@ -46,9 +46,9 @@ class mrsyncController
     /**
      * Checks if a valid curl conection has been stablished
      *
-     * @param curl $curl
+     * @param resource $curl
      */
-    public function checkCurlInit( curl $curl )
+    public function checkCurlInit($curl)
     {
         if ( $curl == null ) {
             $warning = $this->_vbphrase['curl_fail'];
